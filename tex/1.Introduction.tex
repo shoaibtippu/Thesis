@@ -1,63 +1,100 @@
-%!TEX root = ../thesis.tex
+%!TEX root = ../thesis-1 Mids.tex
 \chapter{Introduction} % (fold)
 \label{cha:_introduction}
 
-\section{Theoretical Background (You can use some base level figures to better explain the context of your study)} % (fold)
+\section{Theoretical Background} % (fold)
 \label{sec1.1}
-Everyone in today's society relies on the Internet for social contact. Your age, career, gender, or sector have no bearing. A wide variety of mobile and smart devices are now widely available due to users' eagerness to access the web. According to~\cite{kumar2022systematic}, the web's content is multi-dimensional, enticing individuals from various walks of life. 
 
+Healthcare delivery has become deeply dependent on networked technology. Patients today are connected to wearable monitors, implanted sensors, and remote diagnostic systems that stream clinical data in real time to hospitals, clinicians, and cloud platforms. This ecosystem, commonly called the Internet of Medical Things (IoMT), has grown rapidly and now sits at the centre of modern patient care. With that growth, however, comes a problem that the healthcare sector has not fully solved: how to protect the data flowing through these systems from people who should not have access to it.
 
+The dominant threat is not a sophisticated technical exploit but a mundane one. An attacker who obtains a healthcare worker's login credentials does not break in; they log in. Standard access control systems cannot distinguish between the two, because they verify the credential itself, not the person or the context behind it. Once a session is authenticated, the system treats it as trusted and allows decryption of whatever data the credential's owner is permitted to see. The result is that a stolen credential can unlock sensitive patient records including diagnoses, medication histories, and mental health information, with no cryptographic mechanism at the data layer to prevent it once authentication succeeds.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\textwidth]{img/Dice.PNG}
-\caption{Template figure ~\cite{brodic2017statistical}.}
-\label{fig1.1}
-\end{figure}
-For example in Figure \ref{fig:brodic2017statistical}  A Dice  is a free image-based  that will protect the online forms from spammers without irritating the users.  
-\subsection{(You can use subection as per your domain)} % (fold)
+The present thesis addresses this gap by combining two complementary lines of research that, in isolation, each solve part of the problem but have not previously been integrated.
+
+\subsection{Attribute-Based Encryption in IoMT} % (fold)
 \label{sec1.1.1}
-Write anything you want.
 
-% subsection subsection_112 (end)
+Ciphertext-policy attribute-based encryption (CP-ABE) is one of the most powerful tools available for protecting medical data. Rather than encrypting data for a specific person, CP-ABE encrypts it under a \textit{policy}, such as \texttt{Doctor AND Cardiology}, and only holders of keys whose attributes satisfy that policy can decrypt it. This is well suited to healthcare, where many different roles need overlapping access and permissions change as patients move between departments and clinicians rotate.
 
-\subsection{(You can use subection as per your domain)} % (fold)
+The most recent and directly relevant application of CP-ABE to IoMT is the scheme proposed by Ding et al., which builds a blockchain-enhanced anonymous data sharing framework for 6G-enabled smart healthcare with distributed key generation and policy hiding~\cite{ding2026badsabe}. The scheme eliminates the central trusted authority by distributing key generation across blockchain smart contracts. It combines CP-ABE policy hiding with anonymous authentication so that neither the access policy nor the user identity is exposed during data retrieval, and it is designed for the overlapping, dynamic role structures of a modern hospital environment. It represents the current state of the art and serves as the primary reference for the cryptographic component of this thesis.
+
+However, this scheme shares a fundamental limitation with virtually all CP-ABE approaches: the access decision is static. Once a user holds a key whose attributes satisfy the ciphertext policy, decryption succeeds. The system does not ask whether the access was attempted from a familiar hospital workstation or from an unrecognised device in a foreign country. A stolen credential with valid attributes passes every check.
+
+\subsection{Authentication Security in IoMT} % (fold)
 \label{sec1.1.2}
-Write anything you want.
-% subsection subsection_112 (end)
-  
 
+Recent work has addressed authentication in IoMT from a cryptographic angle. Xu et al.\ proposed an anonymity-enhanced sequential multi-signer ring signature (ASMR) scheme in which patients and doctors co-sign electronic health records within separate anonymous rings~\cite{xu2025asmr}. In a related contribution, Xu et al.\ also proposed a post-quantum certificateless signcryption scheme with linkability (PQ-CLSCL), which provides quantum-resistant security and a mechanism for detecting repeated or anomalous transmissions in IoMT~\cite{xu2025pqclscl}. Both schemes provide strong identity guarantees, but they share a fundamental property: they make a binary pass/fail decision from key material alone, retaining no contextual information beyond that point, and have no reach into what an authenticated session is allowed to decrypt.
 
-% subsection subsection_113 (end)
-\subsection{(You can use subection as per your domain)} % (fold)
+\subsection{Machine Learning for IoMT Security} % (fold)
 \label{sec1.1.3}
-The report will critically evaluate the existing work and find the techniques used in Game-Based Image-Based CAPTCHA Generation. 
 
+Machine learning has recently been applied to security decisions in IoMT. Ullah et al.\ combined a generative adversarial network (GAN) with a bidirectional long short-term memory network (BiLSTM) to detect cyber threats in IoMT, adding explainability through SHAP and LIME (Local Interpretable Model-Agnostic Explanations) so clinical users can understand why a threat was flagged~\cite{ullah2025interpretable}. Anjum et al.\ integrated a Random Forest classifier with blockchain to adjust access permissions dynamically based on real-time access patterns and user behaviour~\cite{anjum2025blockchain}. These contributions show that ML can produce accurate and adaptive security decisions in IoMT settings, though both systems operate at the alert or policy-decision layer without reaching the encryption layer itself.
 
+The gap these three research threads reveal is specific: no existing scheme integrates a machine learning risk model directly into CP-ABE access control in an IoMT setting, so that the cryptographic protection itself varies with the trustworthiness of the access attempt. The present thesis establishes this integration.
+
+% subsection (end)
 
 \section{Motivation}
-\label{sec: section number}
-Add motivation.
+\label{sec:motivation}
 
+The core motivation for this research is straightforward: stolen credentials in IoMT can unlock patient records, and existing systems do nothing to prevent this once an initial login succeeds.
 
-\section{Objectives}
-\label{sec: section number}
+CP-ABE schemes such as the one proposed by Ding et al.~\cite{ding2026badsabe} protect data cryptographically and survive compromised servers, but they treat every session holding valid attributes the same regardless of how suspicious the access attempt is. Authentication schemes such as ASMR~\cite{xu2025asmr} and PQ-CLSCL~\cite{xu2025pqclscl} make a one-time binary check and discard all context information after that decision. ML-based security systems~\cite{ullah2025interpretable, anjum2025blockchain} detect anomalous behaviour but their decisions do not carry into the encryption layer.
 
-Add objectives and scope.
+If a login risk score could be embedded as an attribute in a CP-ABE session key, the encryption layer would become risk-aware. A session judged low-risk would receive a key capable of decrypting sensitive records. A session judged high-risk, perhaps because it originated from an unfamiliar country, device, and network simultaneously, would receive a key that cannot decrypt sensitive data regardless of whether the credential is technically valid. The protection is enforced cryptographically in the data itself, not as a step-up authentication challenge that an attacker in possession of a stolen second factor can bypass.
+
+The present thesis proposes, implements, and evaluates this system.
+
 \section{Problem Statement}
-\label{sec: section number}
-Write problem statement.
+\label{sec:problemstatement}
+
+Existing IoMT access control systems fail to account for the context in which credentials are used. CP-ABE schemes, including the state-of-the-art scheme of Ding et al.~\cite{ding2026badsabe}, grant decryption rights to any session holding the required attributes without regard to whether that session's login behaviour was normal or anomalous. Authentication schemes for IoMT~\cite{xu2025asmr, xu2025pqclscl} make a binary pass/fail decision from key material and have no mechanism to restrict what an admitted session can decrypt. As a result, a stolen credential with valid attributes provides the same level of decryption access whether it is used by its legitimate owner or by an attacker logging in from an entirely different country, device, and network.
+
+This thesis addresses the gap by integrating a machine learning risk model directly into the CP-ABE access control layer for IoMT. A risk attribute derived from login-context features is embedded in each session's decryption key. Sensitive medical records are encrypted under policies that require a low-risk attribute, so a suspicious session cannot decrypt them regardless of the other attributes it carries.
 
 \section{Research Questions}
-\label{sec: section number}
+\label{sec:researchquestions}
+
+This thesis is guided by the following research questions:
+
+\begin{enumerate}
+    \item Can a machine learning model trained on login-context features produce a reliable risk score that distinguishes legitimate from suspicious access attempts at the scale of the Wiefling et al.\ dataset~\cite{wiefling2023pump}?
+    \item How accurately does such a model perform compared to the Freeman et al.\ statistical risk-based authentication baseline~\cite{freeman2016you} on the same data and evaluation splits?
+    \item Can a risk score be embedded as an attribute in a CP-ABE session key, and does the resulting system block simulated credential misuse while keeping false challenge rates acceptably low for legitimate users?
+    \item What is the cryptographic cost of integrating a dynamic risk attribute into CP-ABE compared to a static CP-ABE system, in terms of key generation, encryption, decryption, and risk-driven key reissuing?
+\end{enumerate}
+
+\section{Objectives}
+\label{sec:objectives}
+
+The objectives of this research are as follows:
+
+\begin{enumerate}
+    \item To train and evaluate machine learning models on a large-scale real-world login dataset, specifically LightGBM and XGBoost for supervised risk scoring and Isolation Forest for unsupervised anomaly detection, handling the extreme class imbalance between normal logins and attack attempts.
+    \item To compare the trained models against the Freeman et al.\ statistical risk-based authentication baseline~\cite{freeman2016you} using ROC-AUC, PR-AUC, recall at a fixed false-positive rate, and the share of genuine logins challenged, with 95\% bootstrap confidence intervals.
+    \item To generate SHAP explanations for model predictions so that it is possible to understand why a particular login was assigned a high risk score.
+    \item To design a sensitivity-tiered CP-ABE policy structure for synthetic IoMT medical records, map risk scores to low, medium, and high risk attributes, and implement the scheme using the Charm-Crypto framework.
+    \item To simulate credential misuse by replaying genuine accounts from unfamiliar countries, networks, and devices, and to measure the attack block rate alongside the false challenge rate for normal users.
+    \item To benchmark the cryptographic cost of the risk-adaptive system against static CP-ABE, measuring key generation, encryption, decryption, and risk-driven key reissuing times over repeated runs.
+\end{enumerate}
 
 \section{Research Methodology}
-\label{sec: section number}
+\label{sec:researchmethodology}
 
-\section{Thesis Organization}
+This research proceeds in three phases that mirror the structure of the proposed system.
+
+The first phase builds the risk model. A stratified sample of login attempts is drawn from the large-scale real-world login dataset of Wiefling et al.~\cite{wiefling2023pump}, which contains over 31 million login attempts from 3.3 million users collected across more than one year. Data are split by user and time so that models are always tested on later logins from accounts not seen during training. Features include login-context signals such as IP-derived country, region and network, browser, operating system, device type, round-trip time, and login hour, as well as user-history features that capture whether a country, device, or network is new for a particular account. LightGBM is the main model, XGBoost serves as a comparison, and Isolation Forest provides an unsupervised alternative. Class imbalance is handled through cost-sensitive learning, and all metrics are reported with 95\% bootstrap confidence intervals.
+
+The second phase integrates the risk model with CP-ABE. Risk scores are mapped to three attribute levels: low, medium, and high. These attributes are embedded in session-level decryption keys implemented through the Charm-Crypto framework. The encryption follows the standard hybrid design: AES-GCM encrypts each medical record, and CP-ABE encrypts only the AES key. Synthetic patient records generated with Synthea are divided into three sensitivity tiers, each requiring a different minimum risk attribute to decrypt.
+
+The third phase evaluates the combined system. Credential misuse is simulated by replaying genuine account histories from contexts those accounts have never used before. The system is then assessed on attack block rate, false challenge rate, and cryptographic cost compared to a static CP-ABE baseline.
+
+\section{Thesis Organisation}
 \label{sec:section_ThesisOrg}
-Explain thesis organization.
+
+The remainder of this thesis is organised as follows. Chapter~2 reviews the relevant literature, covering access control and authentication in IoMT, machine learning for IoMT security, and the specific research gap this thesis addresses. Chapter~3 presents the methodology in detail, describing the dataset, feature engineering, model training and evaluation, the CP-ABE policy design, and the integration prototype. Chapter~4 reports the results of the risk model evaluation, the credential misuse simulation, and the cryptographic benchmarks. Chapter~5 concludes the thesis, summarises the main findings, discusses limitations, and suggests directions for future work.
 
 \section{Chapter Summary}
-Write chapter summary.
 \label{sec:section_Sum}
+
+This chapter introduced the problem of credential misuse in IoMT, where stolen credentials can decrypt sensitive patient records because existing CP-ABE access control is static and existing authentication schemes have no reach into the encryption layer. It presented the motivation for combining machine learning risk scoring with CP-ABE, stated the problem formally, listed the research questions and objectives, and outlined the three-phase methodology and thesis structure. The next chapter reviews the literature that underpins this work.

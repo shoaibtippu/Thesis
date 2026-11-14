@@ -1,103 +1,101 @@
-%!TEX root = ../thesis.tex
+%!TEX root = ../thesis-1 Mids.tex
 \chapter{Literature Review} % (fold)
 \label{cha:_literature_review}
-Write an introductory 
- \cite{hong2018predicting} paragraph regarding the literature review of your domain. You can explain the current progress in the domain in a few lines and \cite{hong2018predicting} then the selection criteria of literature to be reviewed.
+
+Protecting patient data in the Internet of Medical Things is a problem that the research community has approached from multiple directions. Cryptographers have developed attribute-based encryption schemes that lock records under fine-grained policies and protect data confidentiality even when storage servers are compromised. Security engineers have built authentication schemes with strong identity guarantees. Machine learning researchers have demonstrated that adaptive, data-driven security decisions can work in IoMT settings. To the best of the authors' knowledge, none of these directions connects the risk of an access attempt to the cryptographic layer that controls what can be decrypted. This chapter reviews the most recent and relevant work in each area and identifies the specific gap that this thesis addresses. The selection criterion for papers in this review was direct relevance to at least one of three dimensions: cryptographic access control for IoMT, authentication security in IoMT, or machine learning for security decisions in IoMT, with a focus on work published from 2024 onwards in peer-reviewed journals.
 
 \section{Related Work} % (fold)
 \label{sec:section_21}
 
-Write the related work in detail.
+\subsection{Access Control and Encryption in IoMT}
+\label{sec:subsection_211}
 
-\textbf{Note: For the critical review table- consult your supervisor to finalize the columns of table according to your domain.}
+Among the most recent and comprehensive contributions to cryptographic access control for IoMT is the scheme proposed by Ding et al., which presents a blockchain-enhanced anonymous data sharing framework for 6G-enabled smart healthcare with distributed key generation and policy hiding~\cite{ding2026badsabe}. The scheme distributes key generation across blockchain smart contracts using Newton interpolation, eliminating the need for a central trusted authority. It combines CP-ABE policy hiding with anonymous authentication so that neither the access policy structure nor the user's identity is exposed during access. The scheme is designed for a healthcare environment where patients, doctors, and administrators hold overlapping and changing role sets, and it reports better computational efficiency than comparable data-sharing schemes.
 
+A related contribution by Liang et al.\ proposes an access control scheme for smart healthcare that combines CP-ABE with privacy-preserving authentication and a flexible secret-key revocation mechanism, allowing access rights to be efficiently withdrawn without re-encrypting stored records~\cite{liang2024access}. While this addresses the revocation problem that has long complicated CP-ABE deployment in healthcare, the scheme still makes no use of the context in which credentials are presented. A session with valid, unrevoked attributes decrypts data regardless of how suspicious the access attempt looks.
 
+Bharath Babu and Jothi propose a privacy-preserving analytics framework for healthcare records in multi-tenant cloud environments that integrates zero-knowledge proofs (ZKPs) with a blockchain audit layer~\cite{bharathbabu2025zkp}. Although its primary focus is analytics rather than fine-grained access control, it is included here because the ZKP component governs what computations are permitted on encrypted records — a form of cryptographic access enforcement closely related to CP-ABE policy gating. The ZKP component allows a party to prove that a computation over encrypted health records is correct without revealing the underlying data, while the blockchain provides an immutable log of all analytics queries. However, like the schemes of Ding et al.\ and Liang et al., the authorization policy in this framework is static: a credential that satisfies the policy succeeds regardless of the context in which it is used.
 
+Of particular relevance to this thesis is the limitation that Ding et al.\ themselves acknowledge: the access decision is static. Once a user holds a key whose attributes satisfy the ciphertext policy, decryption succeeds regardless of the context of the access attempt. A login from an unfamiliar device in a foreign country is treated identically to a routine login from the user's workstation. The authors identify efficient attribute revocation and lightweight optimisation as directions for future work~\cite{ding2026badsabe}, but they do not consider the risk of the access attempt as an input to the access decision. This static nature, shared by virtually all CP-ABE schemes in the literature, is the starting point for this thesis.
+
+\subsection{Authentication Security in IoMT}
+\label{sec:subsection_212}
+
+Recent work has addressed the authentication layer of IoMT from a cryptographic perspective. Xu et al.\ proposed ASMR, a dual-ring sequential multi-signer ring signature scheme in which patients and doctors co-sign electronic health records anonymously within separate rings~\cite{xu2025asmr}. ASMR achieves anonymity and traceability without a central trusted entity, with proofs in the random oracle model and substantial reductions in computation and communication cost compared to prior ring signature schemes. The scheme ensures that only authorised parties contributed to a record and that individual signers cannot be identified from the signature.
+
+In a related contribution, Xu et al.\ proposed PQ-CLSCL, a lattice-based certificateless signcryption scheme with a linkability mechanism for IoMT~\cite{xu2025pqclscl}. By building on lattice hardness assumptions, PQ-CLSCL provides resistance to attacks from quantum computers, which is a practical concern for long-lived medical records. The linkability feature allows the system to detect when the same message is transmitted more than once, which catches replay attacks.
+
+Both schemes provide strong guarantees about identity and data origin, but they share a fundamental limitation: they make a binary decision from key material alone. A valid signature or credential is accepted; an invalid one is rejected. Neither scheme considers the behavioural or environmental context of the request. ASMR establishes who co-signed a record but says nothing about who is attempting to access it later, or under what circumstances. The linkability in PQ-CLSCL operates on message repetition, not on the risk of the requesting session. A stolen credential with a valid signature passes every check in both schemes. Even risk-adaptive authentication approaches such as that of Mavhemwa et al.~\cite{mavhemwa2025naivebayes}, which dynamically adjust the authenticator based on contextual risk, do not carry this risk assessment forward into the encryption layer: once a session is admitted, the data it can decrypt is determined solely by its attribute set.
+
+\subsection{Machine Learning for Security in IoMT}
+\label{sec:subsection_213}
+
+Machine learning has recently been applied to security decisions in IoMT with promising results. Ullah et al.\ developed an interpretable threat detection system that combines a GAN, which synthesises samples for rare attack classes to handle class imbalance, with a BiLSTM that captures temporal attack patterns~\cite{ullah2025interpretable}. The system adds SHAP and LIME explanations so that clinical users can understand why a particular session was flagged as a threat. Evaluated on IoMT benchmark datasets, it achieves strong detection performance with an interpretable output that meets the transparency requirements of clinical environments. This work demonstrates that ML can produce accurate and explainable security decisions on the kind of heavily imbalanced IoMT data that this thesis also deals with.
+
+Anjum et al.\ proposed a system that integrates a Random Forest classifier with blockchain to adjust access permissions dynamically based on real-time access patterns and user behaviour in healthcare IoT~\cite{anjum2025blockchain}. A Random Forest classifier analyses real-time access patterns and flags anomalous behaviour that may indicate misuse. When an anomaly is detected, the blockchain-based access control policy is updated in real time. The system achieves accurate detection with low latency, demonstrating that ML-driven dynamic access control is feasible in healthcare IoT at scale.
+
+Nowrozy et al.\ propose a tripartite access control model for electronic health records that combines GPT-based natural language processing, an ontology layer, and context-aware attribute-based access control (CAABAC)~\cite{nowrozy2025caabac}. Although the primary mechanism is an access control policy engine, it is included in this subsection because its use of GPT for policy inference and ontology-driven context extraction represents a data-driven, learned approach to security decisions rather than a purely rule-based one. The model enforces access decisions based not only on a user's static role attributes but also on compliance context and situational information at the time of access. The key distinction from the approach proposed in this thesis is that CAABAC operates at the policy-decision layer: it decides whether access is permitted, but it does not bind the risk assessment into the cryptographic key itself. This thesis enforces context-derived attributes directly inside CP-ABE session keys, so the restriction holds even if the policy layer is bypassed or misconfigured.
+
+Mavhemwa et al.\ developed a Naïve Bayes based adaptive continuous authentication prototype for young IoMT users on Android devices, integrating physiological biometrics from smartwatches with behavioural, environmental, and contextual signals~\cite{mavhemwa2025naivebayes}. The model dynamically assesses risk and trust at each login event by analysing device, network, location, and user habit features alongside demographic factors such as age and medical condition, then assigns an appropriate authenticator in real time. This work is directly relevant to this thesis because it demonstrates that risk-based adaptive authentication is both feasible and practically deployable in an IoMT setting. Its reported false rejection rate of 19\% also establishes a usability baseline against which the false challenge rate of this thesis's risk model can be compared. The key difference is scope: Mavhemwa et al.\ stop at the authentication decision layer, while this thesis carries the risk score forward into the CP-ABE encryption layer so that the restriction is cryptographically enforced in the stored data.
+
+The closest existing work to the approach proposed in this thesis is the SmartIoT Hybrid ML Model of Saleem et al., which integrates a Random Forest classifier with attribute-based authentication for IoT access control~\cite{saleem2025ml}. The model assesses each access request using user attributes, login patterns, and behavioural signals, achieving 86\% authentication accuracy and 96\% recall while maintaining a response time of 112\,ms on low-power devices. This work demonstrates that combining machine learning with attribute-based security mechanisms is both feasible and effective in IoT settings. However, the scheme operates at the authentication decision layer: it decides whether to allow or deny a session, but once a session is admitted, it has no reach into the encryption layer. Sensitive data remains readable to any session that passes the classifier, and the access decision is not cryptographically enforced in the stored records.
+
+All ML-based systems reviewed above operate at the detection, policy-decision, or authentication layer. Ullah et al.\ produce a threat alert; Anjum et al.\ update a policy rule; Nowrozy et al.\ adjust an access decision based on context; Mavhemwa et al.\ choose an authenticator based on risk; and Saleem et al.\ grant or deny a session based on attribute-enriched ML scores. None of these systems reaches inside the encryption layer. Data remains readable to any session that bypasses the detection or decision point, and a policy update does not retroactively restrict what an already-admitted session can decrypt. The gap that cryptographic enforcement addresses is precisely this: a CP-ABE key that cannot decrypt sensitive data is a guarantee that holds even if the detection system is fooled.
 
 \begin{landscape}
 \begin{scriptsize}
 \begin{table}[!htb]
-%\renewcommand{\arraystretch}{2}
 \centering
-\caption{Critical Evaluation - State of the artwork.}
-\setlength\tabcolsep{19pt}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
-    \hline
-
-    \thead{S.No.} & \thead{Ref/ Year} &  \thead{Method(s) Used} & \thead{Main \\   Contribution} & \thead{Features} & Dataset & \thead{Evaluation \\ Parameters \\ and \\ Prediction \\ Accuracy} & \thead{Limitations/ \\ Weaknesses} \\
-    \hline
-    -- & -- & -- & -- & -- & -- & -- & --  \\
+\caption{Critical Evaluation --- State of the Art in Access Control and Authentication for IoMT.}
+\label{tab:demo_table}
+\setlength\tabcolsep{5pt}
+\begin{tabular}{|p{0.4cm}|p{2.8cm}|p{3cm}|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|p{2.8cm}|}
 \hline
-
-    \end{tabular}
-
-    \label{tab:demo_table}
+\thead{S.No.} & \thead{Ref / Year} & \thead{Method(s) Used} & \thead{Main Contribution} & \thead{Features / Attributes} & \thead{Dataset} & \thead{Evaluation Parameters} & \thead{Limitations / Weaknesses} \\
+\hline
+1 & Liang et al.~\cite{liang2024access} / 2024 & CP-ABE with privacy-preserving authentication and revocation & Flexible revocation without re-encryption for smart healthcare & Role-based attributes & Synthetic healthcare & Efficiency, security analysis & Static access; no login-context awareness \\
+\hline
+2 & Bharath Babu \& Jothi~\cite{bharathbabu2025zkp} / 2025 & ZKP + blockchain & Privacy-preserving analytics for multi-tenant cloud healthcare & Encrypted health records & Healthcare cloud simulation & Scalability, security proof, efficiency & Static access; no login-context awareness; analytics-only, not access control \\
+\hline
+3 & Ding et al.~\cite{ding2026badsabe} / 2026 & CP-ABE, blockchain, Groth signature & Privacy-preserving access control for 6G IoMT & Role and domain attributes; policy hidden & Synthetic IoMT simulation & Efficiency, security proof & Static access; no login-context awareness \\
+\hline
+4 & Xu et al.~\cite{xu2025asmr} / 2025 & Dual-ring sequential ring signature & Anonymous co-signing of EHRs for IoMT & Role-based identity; separate patient and doctor rings & Synthetic & Computation cost, storage & Binary authentication; no context; no access control \\
+\hline
+5 & Xu et al.~\cite{xu2025pqclscl} / 2025 & Lattice-based certificateless signcryption with linkability & Post-quantum secure transmission with replay detection & Lattice-based identity credentials & Synthetic IoMT & Security proof, efficiency & Binary authentication; linkability on message, not session risk \\
+\hline
+6 & Ullah et al.~\cite{ullah2025interpretable} / 2025 & GAN + BiLSTM + SHAP/LIME & Interpretable cyber threat detection for IoMT & Network traffic features & IoMT benchmark & F1, AUC, explainability & Detection only; no access control or crypto integration \\
+\hline
+7 & Anjum et al.~\cite{anjum2025blockchain} / 2025 & Blockchain + Random Forest & ML-adjusted access permissions for healthcare IoT & Access patterns, behaviour & Healthcare IoT simulation & Accuracy, latency & Policy-layer only; no cryptographic enforcement \\
+\hline
+8 & Saleem et al.~\cite{saleem2025ml} / 2025 & Random Forest + attribute-based auth & ML-enhanced attribute-based auth for IoT access control & User attributes, login patterns, behaviour & IoT simulation & Accuracy 86\%, precision 88\%, recall 96\% & Auth-layer only; no encryption enforcement; not IoMT medical \\
+\hline
+9 & Nowrozy et al.~\cite{nowrozy2025caabac} / 2025 & GPT + ontology + CAABAC & Tripartite context-aware access control for EHRs & Role, compliance context, situational attributes & Healthcare EHR case study & Policy correctness, compliance coverage & Policy-decision layer only; no cryptographic enforcement \\
+\hline
+10 & Mavhemwa et al.~\cite{mavhemwa2025naivebayes} / 2025 & Naïve Bayes + biometrics + context & Risk-based adaptive continuous auth for young IoMT users & Device, network, location, habits, demographics & Android smartwatch IoMT simulation & FRR 19\%, accuracy, usability & Auth-layer only; no cryptographic enforcement; FRR 19\% \\
+\hline
+\textbf{11} & \textbf{This thesis} & \textbf{ML risk model + CP-ABE} & \textbf{Risk-adaptive CP-ABE for IoMT credential misuse mitigation} & \textbf{Login context + user history} & \textbf{Real-world login dataset (33M attempts)} & \textbf{AUC, block rate, crypto cost} & \textbf{Login-time risk only; no in-session monitoring} \\
+\hline
+\end{tabular}
 \end{table}
 \end{scriptsize}
 \end{landscape}
 
-
-
-
-\begin{table}
-\begin{center}
-
-\caption{Template Table.}
-    \begin{tabular}{ | c | c | c |}
-      \hline
-      \thead{A Head} & \thead{A Second \\ Head} & \thead{A Third \\ Head} \\
-      \hline
-      Some text &  \makecell{Some really \\ longer text}  & Text text text  \\
-      \hline
-    \end{tabular}
-  \end{center}
-
-    \end{table}
-
-
-\par
-Write your material
-
-%\begin{multline}
-%p(x) = 3x^6 + 14x^5y + 590x^4y^2 + 19x^3y^3 - 12x^2y^4 - 12xy^5 + 2y^6 - a^3b^3\\
-%- 12x^2y^4 - 12xy^5 + 2y^6 - a^3b^3 - 12x^2y^4 - 12xy^5 + %2y^6 - a^3b^3
-%\end{multline}
-% subsection subsection_211 (end)
-
-\subsection{Subsection for one dimension of your work e.g., precision agriculture using ML}
-\par
-Add text here.
-\subsection{Subsection for one dimension of your work e.g., precision agriculture using Game Theory} % (fold)
-\label{sub:subsection_212}
-\par
-
-Add text here
-
-\subsection{Subsection for one dimension of your work e.g., precision agriculture using Hybrid Approaches} % (fold)
-\label{sub:subsection_213}
-\par
-Add text here
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Critical Analysis and Research Gaps}
-Write critical analysis.
-\textbf{THIS SECTION SHOULD BE WRITTEN IN ACCORDANCE
-WITH THE PROBLEM STATEMENT,  research questions, and objectives of the study }
+\label{sec:section_CriticalAnalysis}
+
+The reviewed literature reveals three specific gaps that this thesis addresses, each identified in direct relation to the problem statement and research questions.
+
+\textbf{Static cryptographic access control.} The scheme of Ding et al.~\cite{ding2026badsabe}, a recent high-performing CP-ABE scheme for IoMT, grants decryption to any session holding the required attributes without regard to the context of the access attempt. The encryption layer has no awareness of login behaviour. A credential stolen from a healthcare worker gives an attacker the same cryptographic access as the worker themselves, with no mechanism in the encryption layer to prevent it.
+
+\textbf{Authentication that stops at the login boundary.} Both ASMR~\cite{xu2025asmr} and PQ-CLSCL~\cite{xu2025pqclscl} provide strong guarantees about identity and data integrity, but their security holds only at the point of authentication. Once a session is admitted, neither scheme has any further say over what that session can decrypt. A stolen credential with a valid signature is cryptographically indistinguishable from its legitimate owner at every step after login.
+
+\textbf{ML-driven security decisions that do not reach the encryption layer.} Ullah et al.~\cite{ullah2025interpretable} and Anjum et al.~\cite{anjum2025blockchain} demonstrate that machine learning can produce accurate and adaptive security decisions in IoMT. However, both systems operate at the detection or policy-decision layer. Data remains readable to any session that bypasses the detection point, and policy adjustments do not affect what an already-authenticated session can decrypt. The reviewed literature confirms that this gap — context-aware cryptographic access control driven by learned risk models — remains open.
+
+This thesis fills the gap by extending the CP-ABE access control layer of Ding et al.~\cite{ding2026badsabe} with a machine learning risk attribute. A risk model is trained on a large-scale real-world login dataset and its output is mapped to a risk attribute (low, medium, or high) embedded in the user's CP-ABE session key. Sensitive patient records generated with Synthea are encrypted under sensitivity-tiered policies, so a high-risk session cannot decrypt sensitive records and must re-authenticate.
+
 \section{Summary of the Chapter}
-Write chapter summary.
+\label{sec:section_LitSum}
+
+This chapter reviewed the most recent literature on cryptographic access control for IoMT, with the scheme of Ding et al.\ as the central reference point for what CP-ABE can and cannot do. It reviewed authentication schemes for IoMT and noted that all of them treat authentication as a one-time binary check with no reach into the decryption layer. It reviewed machine learning approaches to security in IoMT and found that ML can produce accurate and adaptive decisions, but that existing systems do not carry those decisions into the encryption layer. Three specific research gaps were identified across these threads, each directly connected to the problem statement, research questions, and objectives of this thesis. The methodology for addressing these gaps is described in the next chapter.
 % subsection subsection_222 (end)
 % section section_22 (end)
-
-
-
