@@ -7,6 +7,41 @@ Securing patient data within the Internet of Medical Things has attracted resear
 \section{Related Work} % (fold)
 \label{sec:section_21}
 
+\clearpage
+\begin{sidewaystable}[!h]
+\centering
+\caption{Critical Evaluation --- State of the Art in Access Control and Authentication for IoMT.}
+\label{tab:demo_table}
+{\scriptsize
+\renewcommand{\arraystretch}{0.85}
+\setlength\tabcolsep{3pt}
+\begin{tabular}{|p{0.4cm}|p{2.8cm}|p{3cm}|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|p{2.8cm}|}
+\hline
+\thead{S.No.} & \thead{Ref / Year} & \thead{Method(s) Used} & \thead{Main Contribution} & \thead{Features / Attributes} & \thead{Dataset} & \thead{Evaluation Parameters} & \thead{Limitations / Weaknesses} \\
+\hline
+1 & Liang et al.~\cite{liang2024access} / 2024 & CP-ABE with privacy-preserving authentication and revocation & Flexible revocation without re-encryption for smart healthcare & Role-based attributes & Synthetic healthcare & Efficiency, security analysis & Static access; no login-context awareness \\
+\hline
+2 & Bharath Babu \& Jothi~\cite{bharathbabu2025zkp} / 2025 & ZKP + blockchain & Privacy-preserving analytics for multi-tenant cloud healthcare & Encrypted health records & Healthcare cloud simulation & Scalability, security proof, efficiency & Static access; no login-context awareness; analytics-only, not access control \\
+\hline
+3 & Ding et al.~\cite{ding2026badsabe} / 2026 & CP-ABE, blockchain, Groth signature & Privacy-preserving access control for 6G IoMT & Role and domain attributes; policy hidden & Synthetic IoMT simulation & Efficiency, security proof & Static access; no login-context awareness \\
+\hline
+4 & Xu et al.~\cite{xu2025asmr} / 2025 & Dual-ring sequential ring signature & Anonymous co-signing of EHRs for IoMT & Role-based identity; separate patient and doctor rings & Synthetic & Computation cost, storage & Binary authentication; no context; no access control \\
+\hline
+5 & Xu et al.~\cite{xu2025pqclscl} / 2025 & Lattice-based certificateless signcryption with linkability & Post-quantum secure transmission with replay detection & Lattice-based identity credentials & Synthetic IoMT & Security proof, efficiency & Binary authentication; linkability on message, not session risk \\
+\hline
+6 & Ullah et al.~\cite{ullah2025interpretable} / 2025 & GAN + BiLSTM + SHAP/LIME & Interpretable cyber threat detection for IoMT & Network traffic features & IoMT benchmark & F1, AUC, explainability & Detection only; no access control or crypto integration \\
+\hline
+7 & Anjum et al.~\cite{anjum2025blockchain} / 2025 & Blockchain + Random Forest & ML-adjusted access permissions for healthcare IoT & Access patterns, behaviour & Healthcare IoT simulation & Accuracy, latency & Policy-layer only; no cryptographic enforcement \\
+\hline
+8 & Saleem et al.~\cite{saleem2025ml} / 2025 & Random Forest + attribute-based auth & ML-enhanced attribute-based auth for IoT access control & User attributes, login patterns, behaviour & IoT simulation & Accuracy 86\%, precision 88\%, recall 96\% & Auth-layer only; no encryption enforcement; not IoMT medical \\
+\hline
+\textbf{9} & \textbf{This thesis} & \textbf{ML risk model + CP-ABE} & \textbf{Risk-adaptive CP-ABE for IoMT credential misuse mitigation} & \textbf{Login context + user history} & \textbf{Real-world login dataset ({>}31M attempts)} & \textbf{AUC, block rate, crypto cost} & \textbf{Login-time risk only; no in-session monitoring} \\
+\hline
+\end{tabular}
+}% end scriptsize group
+\end{sidewaystable}
+\clearpage
+
 \subsection{Access Control and Encryption in IoMT}
 \label{sec:subsection_211}
 
@@ -41,44 +76,6 @@ Mavhemwa et al.\ developed a Na\"{i}ve Bayes-based adaptive continuous authentic
 The work most closely aligned with the approach proposed in this thesis is the SmartIoT Hybrid ML model of Saleem et al., which couples a Random Forest classifier with attribute-based authentication for IoT access control~\cite{saleem2025ml}. The model evaluates each access request on the basis of user attributes, login patterns, and behavioural signals, achieving 86\% authentication accuracy and 96\% recall at a response latency of 112\,ms on low-power devices. This demonstrates that the combination of machine learning with attribute-based security mechanisms is both technically feasible and practically effective in IoT environments. However, the scheme operates exclusively at the authentication decision layer: it determines whether to admit or reject a session but exercises no control over what an admitted session may subsequently decrypt. Sensitive data remains accessible to any session that satisfies the classifier, and the access decision carries no cryptographic enforcement at the data storage level.
 
 In summary, all ML-based systems reviewed in this subsection operate at the detection, policy-decision, or authentication layer. Ullah et al.\ generate a threat alert; Anjum et al.\ update an access policy in response to detected anomalies; Nowrozy et al.\ adjust an access decision based on contextual compliance; Mavhemwa et al.\ select a risk-appropriate authenticator; and Saleem et al.\ admit or deny sessions based on attribute-enriched ML scores. None of these systems penetrates the encryption layer. Data remains accessible to any session that clears the detection or decision checkpoint, and policy revisions do not retroactively constrain what an already-authenticated session may decrypt. The case for cryptographic enforcement rests on this observation: a CP-ABE key that is incapable of decrypting sensitive data provides a guarantee that holds independently of whether the detection system has been deceived.
-
-\begin{landscape}
-\begin{scriptsize}
-\begin{table}[!htb]
-\centering
-\caption{Critical Evaluation --- State of the Art in Access Control and Authentication for IoMT.}
-\label{tab:demo_table}
-\setlength\tabcolsep{5pt}
-\begin{tabular}{|p{0.4cm}|p{2.8cm}|p{3cm}|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|p{2.8cm}|}
-\hline
-\thead{S.No.} & \thead{Ref / Year} & \thead{Method(s) Used} & \thead{Main Contribution} & \thead{Features / Attributes} & \thead{Dataset} & \thead{Evaluation Parameters} & \thead{Limitations / Weaknesses} \\
-\hline
-1 & Liang et al.~\cite{liang2024access} / 2024 & CP-ABE with privacy-preserving authentication and revocation & Flexible revocation without re-encryption for smart healthcare & Role-based attributes & Synthetic healthcare & Efficiency, security analysis & Static access; no login-context awareness \\
-\hline
-2 & Bharath Babu \& Jothi~\cite{bharathbabu2025zkp} / 2025 & ZKP + blockchain & Privacy-preserving analytics for multi-tenant cloud healthcare & Encrypted health records & Healthcare cloud simulation & Scalability, security proof, efficiency & Static access; no login-context awareness; analytics-only, not access control \\
-\hline
-3 & Ding et al.~\cite{ding2026badsabe} / 2026 & CP-ABE, blockchain, Groth signature & Privacy-preserving access control for 6G IoMT & Role and domain attributes; policy hidden & Synthetic IoMT simulation & Efficiency, security proof & Static access; no login-context awareness \\
-\hline
-4 & Xu et al.~\cite{xu2025asmr} / 2025 & Dual-ring sequential ring signature & Anonymous co-signing of EHRs for IoMT & Role-based identity; separate patient and doctor rings & Synthetic & Computation cost, storage & Binary authentication; no context; no access control \\
-\hline
-5 & Xu et al.~\cite{xu2025pqclscl} / 2025 & Lattice-based certificateless signcryption with linkability & Post-quantum secure transmission with replay detection & Lattice-based identity credentials & Synthetic IoMT & Security proof, efficiency & Binary authentication; linkability on message, not session risk \\
-\hline
-6 & Ullah et al.~\cite{ullah2025interpretable} / 2025 & GAN + BiLSTM + SHAP/LIME & Interpretable cyber threat detection for IoMT & Network traffic features & IoMT benchmark & F1, AUC, explainability & Detection only; no access control or crypto integration \\
-\hline
-7 & Anjum et al.~\cite{anjum2025blockchain} / 2025 & Blockchain + Random Forest & ML-adjusted access permissions for healthcare IoT & Access patterns, behaviour & Healthcare IoT simulation & Accuracy, latency & Policy-layer only; no cryptographic enforcement \\
-\hline
-8 & Saleem et al.~\cite{saleem2025ml} / 2025 & Random Forest + attribute-based auth & ML-enhanced attribute-based auth for IoT access control & User attributes, login patterns, behaviour & IoT simulation & Accuracy 86\%, precision 88\%, recall 96\% & Auth-layer only; no encryption enforcement; not IoMT medical \\
-\hline
-9 & Nowrozy et al.~\cite{nowrozy2025caabac} / 2025 & GPT + ontology + CAABAC & Tripartite context-aware access control for EHRs & Role, compliance context, situational attributes & Healthcare EHR case study & Policy correctness, compliance coverage & Policy-decision layer only; no cryptographic enforcement \\
-\hline
-10 & Mavhemwa et al.~\cite{mavhemwa2025naivebayes} / 2025 & Na\"{i}ve Bayes + biometrics + context & Risk-based adaptive continuous auth for young IoMT users & Device, network, location, habits, demographics & Android smartwatch IoMT simulation & FRR 19\%, accuracy, usability & Auth-layer only; no cryptographic enforcement; FRR 19\% \\
-\hline
-\textbf{11} & \textbf{This thesis} & \textbf{ML risk model + CP-ABE} & \textbf{Risk-adaptive CP-ABE for IoMT credential misuse mitigation} & \textbf{Login context + user history} & \textbf{Real-world login dataset ({>}31M attempts)} & \textbf{AUC, block rate, crypto cost} & \textbf{Login-time risk only; no in-session monitoring} \\
-\hline
-\end{tabular}
-\end{table}
-\end{scriptsize}
-\end{landscape}
 
 \section{Critical Analysis and Research Gaps}
 \label{sec:section_CriticalAnalysis}

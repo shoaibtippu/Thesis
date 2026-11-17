@@ -56,9 +56,9 @@ S.~Xu, X.~Chen, Y.~Guo, S.-M. Yiu, S.~Gao, and B.~Xiao, ``Efficient and secure
   \emph{IEEE Transactions on Information Forensics and Security}, vol.~20, pp.
   1119--1134, 2025.
 
-\bibitem[Zabeehullah et~al.(2026)Zabeehullah, Arif, Khan, Khan, Din, Almogren,
-  and Altameem]{ullah2025interpretable}
-Zabeehullah, F.~Arif, N.~A. Khan, M.~A. Khan, I.~U. Din, A.~Almogren, and
+\bibitem[{Zabeehullah} et~al.(2026){Zabeehullah}, Arif, Khan, Khan, Din,
+  Almogren, and Altameem]{ullah2025interpretable}
+{Zabeehullah}, F.~Arif, N.~A. Khan, M.~A. Khan, I.~U. Din, A.~Almogren, and
   A.~Altameem, ``Interpretable and adaptive {GAN-BiLSTM} approach for cyber
   threat detection in {IoMT}-based healthcare 5.0,'' \emph{IEEE Journal of
   Biomedical and Health Informatics}, vol.~30, no.~10, pp. 8459--8466, 2026.
@@ -82,6 +82,12 @@ S.~Bharath~Babu and K.~R. Jothi, ``A secure framework for privacy-preserving
   multi-tenant cloud environments,'' \emph{IEEE Access}, vol.~13, pp.
   8439--8455, 2025.
 
+\bibitem[Saleem et~al.(2025)Saleem, Raza, Hammoudeh, and
+  Holderbaum]{saleem2025ml}
+J.~Saleem, U.~Raza, M.~Hammoudeh, and W.~Holderbaum, ``Machine
+  learning-enhanced attribute-based authentication for secure {IoT} access
+  control,'' \emph{Sensors}, vol.~25, no.~9, p. 2779, 2025.
+
 \bibitem[Mavhemwa et~al.(2025)Mavhemwa, Zennaro, Nsengiyumva, and
   Nzanywayingoma]{mavhemwa2025naivebayes}
 P.~M. Mavhemwa, M.~Zennaro, P.~Nsengiyumva, and F.~Nzanywayingoma, ``Na\"{i}ve
@@ -93,11 +99,5 @@ P.~M. Mavhemwa, M.~Zennaro, P.~Nsengiyumva, and F.~Nzanywayingoma, ``Na\"{i}ve
 R.~Nowrozy, K.~Ahmed, and H.~Wang, ``{GPT}, ontology, and {CAABAC}: A
   tripartite personalized access control model anchored by compliance, context
   and attribute,'' \emph{{PLOS ONE}}, vol.~20, no.~1, p. e0310553, 2025.
-
-\bibitem[Saleem et~al.(2025)Saleem, Raza, Hammoudeh, and
-  Holderbaum]{saleem2025ml}
-J.~Saleem, U.~Raza, M.~Hammoudeh, and W.~Holderbaum, ``Machine
-  learning-enhanced attribute-based authentication for secure {IoT} access
-  control,'' \emph{Sensors}, vol.~25, no.~9, p. 2779, 2025.
 
 \end{thebibliography}
