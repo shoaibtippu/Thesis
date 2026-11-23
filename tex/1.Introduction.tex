@@ -52,8 +52,8 @@ Current IoMT access control schemes grant decryption rights to any session carry
 The present thesis is guided by the following three research questions:
 
 \begin{enumerate}
-    \item To what extent can a machine learning model trained on login-context and user-history features distinguish credential-misuse login attempts from legitimate ones, compared with the Freeman et al.\ statistical risk-based authentication baseline~\cite{freeman2016you}?
-    \item How effectively does embedding the machine learning risk level as an attribute in CP-ABE session keys prevent simulated credential misuse from decrypting sensitive IoMT records, and what false challenge rate does it impose on legitimate users?
+    \item To what extent can a machine learning model trained on login-context and user-history features distinguish credential-misuse login attempts from legitimate ones, compared with a statistical risk-based authentication baseline?
+    \item How effectively does embedding a machine learning risk level as an attribute in CP-ABE session keys prevent credential misuse from decrypting sensitive IoMT records, and what false challenge rate does it impose on legitimate users?
     \item What computational overhead does risk-adaptive CP-ABE introduce compared with static CP-ABE?
 \end{enumerate}
 
@@ -63,9 +63,9 @@ The present thesis is guided by the following three research questions:
 The objectives of this research, each corresponding directly to one research question, are as follows:
 
 \begin{enumerate}
-    \item To train and evaluate LightGBM, XGBoost and Isolation Forest models on the RBA dataset of Wiefling et al.~\cite{wiefling2023pump} and compare them with the Freeman et al.\ statistical risk-based authentication baseline~\cite{freeman2016you} using ROC-AUC, PR-AUC and recall at a fixed false-positive rate, reported with 95\% bootstrap confidence intervals.
-    \item To design and implement a risk-adaptive CP-ABE scheme using the Charm-Crypto framework that embeds a three-level risk attribute in short-lived session keys and enforces sensitivity-tiered policies on synthetic patient records generated with Synthea, and to measure the attack block rate and false challenge rate under simulated credential misuse.
-    \item To benchmark the key generation, encryption, decryption and session-key reissue times of the risk-adaptive scheme against a static CP-ABE baseline.
+    \item To develop and evaluate machine learning models that detect credential-misuse login attempts from login-context and user-history features, and to compare their performance with a statistical risk-based authentication baseline.
+    \item To design and implement a risk-adaptive CP-ABE scheme that embeds a three-level risk attribute in short-lived session keys and enforces sensitivity-tiered access policies on patient records, and to measure its attack block rate and false challenge rate under simulated credential misuse.
+    \item To evaluate the computational overhead of the risk-adaptive scheme, including key generation, encryption, decryption and session-key reissue time, against a static CP-ABE baseline.
 \end{enumerate}
 
 \section{Research Methodology}
