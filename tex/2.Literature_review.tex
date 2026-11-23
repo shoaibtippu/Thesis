@@ -7,7 +7,7 @@ Securing patient data within the Internet of Medical Things has attracted resear
 \section{Related Work} % (fold)
 \label{sec:section_21}
 
-Table~\ref{tab:demo_table} compares nine representative works from the related literature against the approach proposed in the present thesis across six dimensions: method, contribution, features or attributes, dataset, evaluation parameters, and key limitations.
+This table compares nine representative works from the related literature against the approach proposed in the present thesis across six dimensions: method, contribution, features or attributes, dataset, evaluation parameters, and key limitations.
 
 \clearpage
 \begin{sidewaystable}[!h]
@@ -53,7 +53,7 @@ Liang et al.\ propose a complementary access control scheme for smart healthcare
 
 Bharath Babu and Jothi propose a privacy-preserving analytics framework for multi-tenant cloud-hosted healthcare records, combining zero-knowledge proofs (ZKPs) with a blockchain-based audit layer~\cite{bharathbabu2025zkp}. The ZKP component governs what computations may be performed on encrypted records, making it conceptually related to CP-ABE policy gating, though the system's primary focus is analytics. The ZKP mechanism enables a party to demonstrate the correctness of a computation over encrypted health data without exposing the underlying records, while the blockchain provides a tamper-evident log of all query activity. As with the schemes of Ding et al.\ and Liang et al., however, the authorisation policy remains static: any credential satisfying the policy conditions is granted access irrespective of the context in which it is presented.
 
-A limitation evident in the design of Ding et al.\ is that the access decision is static~\cite{ding2026badsabe}. Once a user holds a key satisfying the ciphertext policy, decryption is granted unconditionally, with no consideration of the access context. A login attempt from an unrecognised device in a foreign country is treated no differently from a routine access from a known hospital workstation. \textbf{[VERIFY: confirm in the conclusion of Ding et al.\ that they list attribute revocation and optimisation as future work.]} The design does not consider the risk profile of the access attempt as an input to the access decision. This static characteristic, which is shared by virtually all CP-ABE schemes in the literature, defines the central limitation that the present thesis sets out to address.
+A limitation evident in the design of Ding et al.\ is that the access decision is static~\cite{ding2026badsabe}. Once a user holds a key satisfying the ciphertext policy, decryption is granted unconditionally, with no consideration of the access context. A login attempt from an unrecognised device in a foreign country is treated no differently from a routine access from a known hospital workstation. The design does not consider the risk profile of the access attempt as an input to the access decision. This static characteristic, which is shared by virtually all CP-ABE schemes in the literature, defines the central limitation that the present thesis sets out to address.
 
 
 \subsection{Authentication in IoMT}
