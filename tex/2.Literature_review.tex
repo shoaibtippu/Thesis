@@ -7,7 +7,7 @@ Securing patient data within the Internet of Medical Things has attracted resear
 \section{Related Work} % (fold)
 \label{sec:section_21}
 
-Table~\ref{tab:demo_table} presents a structured evaluation of nine representative works drawn from three research threads directly relevant to the present thesis: cryptographic access control for IoMT, authentication security in IoMT, and machine learning for security in IoMT. Each entry is assessed across six dimensions: the method employed, its principal contribution, the features or attributes it operates on, the dataset used for evaluation, the evaluation parameters reported, and its key limitations. The table shows a consistent pattern: works that provide strong cryptographic guarantees (rows 1--5) treat access control as a static, attribute-only decision, while works that apply machine learning (rows 6--8) operate exclusively at the detection or authentication layer and exercise no control over the encryption layer. The final row positions the present thesis against the surveyed works, identifying the gap that none of them addresses.
+Table~\ref{tab:demo_table} compares nine representative works from the related literature against the approach proposed in the present thesis across six dimensions: method, contribution, features or attributes, dataset, evaluation parameters, and key limitations.
 
 \clearpage
 \begin{sidewaystable}[!h]
@@ -106,6 +106,6 @@ The methodology developed in the present thesis to address this gap, covering th
 \section{Summary of the Chapter}
 \label{sec:section_LitSum}
 
-This chapter has reviewed the most pertinent recent literature on cryptographic access control for IoMT, using the scheme of Ding et al.\ as the primary reference for assessing what CP-ABE can and cannot achieve in practice. Authentication schemes for IoMT were examined and found, without exception, to treat authentication as a one-time binary decision with no subsequent influence over the decryption layer. Machine learning approaches to IoMT security were surveyed and shown to produce accurate and adaptive decisions, yet none carries those decisions into the encryption layer where data is protected. Three specific research gaps were identified across these threads, each directly connected to the problem statement, research questions, and objectives of the present thesis. The methodology developed to address these gaps is presented in the following chapter.
+This chapter has reviewed the most recent literature on cryptographic access control for IoMT, using the scheme of Ding et al.\ as the primary reference for assessing what CP-ABE can and cannot achieve in practice. Authentication schemes for IoMT were examined and found, without exception, to treat authentication as a one-time binary decision with no subsequent influence over the decryption layer. Machine learning approaches to IoMT security were surveyed and shown to produce accurate and adaptive decisions, yet none carries those decisions into the encryption layer where data is protected. Three specific research gaps were identified across these threads, each directly connected to the problem statement, research questions, and objectives of the present thesis. The methodology developed to address these gaps is presented in the following chapter.
 % subsection subsection_222 (end)
 % section section_22 (end)
