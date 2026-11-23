@@ -185,7 +185,7 @@
     
     \newpage
     
-    \chapter*{List of Abbreviations (These must be in the alphabetical order)}
+    \chapter*{List of Abbreviations}
     \markboth{}{}
     %\section*{Abbreviations}
     \begin{acronyms}
@@ -202,11 +202,13 @@
     \item[FRR] False Rejection Rate
     \item[GAN] Generative Adversarial Network
     \item[GCM] Galois/Counter Mode
+    \item[GPT] Generative Pre-trained Transformer
     \item[IoMT] Internet of Medical Things
     \item[IoT] Internet of Things
     \item[KP-ABE] Key-Policy Attribute-Based Encryption
     \item[LIME] Local Interpretable Model-Agnostic Explanations
     \item[ML] Machine Learning
+    \item[MLWE] Module Learning With Errors
     \item[PHR] Personal Health Record
     \item[PQ-CLSCL] Post-Quantum Certificateless Signcryption with Linkability
     \item[PR-AUC] Precision-Recall Area Under the Curve
@@ -237,9 +239,9 @@
     \markboth{}{}
 The Internet of Medical Things (IoMT) has transformed healthcare by connecting patients, devices, and clinical systems in real time. This connectivity, however, introduces a critical security vulnerability: stolen credentials can be used to log into IoMT systems and decrypt sensitive patient records, because existing access control schemes grant decryption based on credential attributes alone, without considering the context in which those credentials are being used. Ciphertext-policy attribute-based encryption (CP-ABE), including the state-of-the-art scheme of Ding et al., enforces access cryptographically but treats every authenticated session identically regardless of the contextual risk of the access attempt. Risk-based authentication (RBA) scores login attempts using contextual signals such as IP address, country, device, and login history, and can detect anomalous access patterns, but RBA decisions do not propagate to the encryption layer.
 
-This thesis bridges these two approaches by integrating a machine learning risk model directly into CP-ABE access control for IoMT. A risk score is computed from login-context features using a LightGBM classifier trained on the Wiefling et al.\ dataset of over 31 million real login attempts~\cite{wiefling2023pump}, and compared against XGBoost, Isolation Forest, and the Freeman et al.\ statistical RBA baseline~\cite{freeman2016you}. The risk score is mapped to a three-level attribute (low, medium, high) that is embedded in the user's session-level decryption key. Sensitive synthetic patient records generated with Synthea are encrypted under sensitivity-tiered CP-ABE policies implemented through the Charm-Crypto framework, so that a high-risk session cannot decrypt sensitive data regardless of which role attributes it carries. Credential misuse is simulated by replaying genuine accounts from unfamiliar contexts, and the system is evaluated on attack block rate, false challenge rate, and cryptographic overhead compared to static CP-ABE.
+This thesis bridges these two approaches by integrating a machine learning risk model directly into CP-ABE access control for IoMT. A risk score is computed from login-context features using a LightGBM classifier trained on the publicly available RBA dataset of Wiefling et al., which contains over 33 million login attempts synthesised from the real login behaviour of 3.3 million users of a large online service~\cite{wiefling2023pump}, and compared against XGBoost, Isolation Forest, and the Freeman et al.\ statistical RBA baseline~\cite{freeman2016you}. The risk score is mapped to a three-level attribute (low, medium, high) that is embedded in the user's session-level decryption key. Sensitive synthetic patient records generated with Synthea are encrypted under sensitivity-tiered CP-ABE policies implemented through the Charm-Crypto framework, so that a high-risk session cannot decrypt sensitive data regardless of which role attributes it carries. Credential misuse is simulated by replaying genuine accounts from unfamiliar contexts, and the system is evaluated on attack block rate, false challenge rate, and session-key reissue cost and cryptographic overhead compared to static CP-ABE.
 
-To the best of the authors' knowledge, the proposed system makes the encryption layer risk-aware for the first time in an IoMT setting, providing cryptographic enforcement that goes beyond the login boundary and directly limits the damage of credential theft.
+To the best of the author's knowledge, the proposed system makes the encryption layer risk-aware for the first time in an IoMT setting, providing cryptographic enforcement that goes beyond the login boundary and directly limits the damage of credential theft.
 
     \textbf{Keywords ---} \textit{Attribute-Based Encryption, Credential Misuse, Internet of Medical Things, Machine Learning, Risk-Based Authentication}
 
