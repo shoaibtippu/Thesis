@@ -2,7 +2,7 @@
 \chapter{Introduction} % (fold)
 \label{cha:_introduction}
 
-\section{Theoretical Background} % (fold)
+\section{Introduction} % (fold)
 \label{sec1.1}
 
 The healthcare industry is heavily reliant upon the use of networked technologies. Patients use wearable monitoring devices, implantable sensors, and remote diagnostic technologies that transmit real-time patient data to hospitals, clinicians, and cloud-based platforms. These connected technologies form what is referred to as the Internet of Medical Things (IoMT) and are central to providing contemporary patient care. Although there has been significant growth in the IoMT, there remains one major issue that the healthcare industry has yet to address: protecting the data transmitted across these systems from individuals who do not possess authorised access.
@@ -16,7 +16,7 @@ Ciphertext-policy attribute-based encryption (CP-ABE) is one of the more express
 
 The most recent and directly relevant application of CP-ABE within the IoMT domain is the scheme proposed by Ding et al., which presents a blockchain-enhanced anonymous data sharing framework designed for 6G-enabled smart healthcare, incorporating distributed key generation and policy hiding~\cite{ding2026badsabe}. By distributing key generation across blockchain smart contracts, the scheme eliminates dependence on a central trusted authority, which is a common vulnerability in traditional public key infrastructures. CP-ABE policy hiding is combined with anonymous authentication, ensuring that neither the access policy structure nor the requesting user's identity is disclosed during data retrieval. The scheme is designed for the overlapping and dynamic role assignments of modern hospital settings and is the most recent comprehensive work in this area, used as the primary cryptographic reference for the present thesis.
 
-Despite these strengths, the scheme shares a fundamental limitation with virtually all existing CP-ABE designs: the access decision is entirely static. Once a user possesses a key whose attributes satisfy the ciphertext policy, decryption is granted unconditionally. No consideration is given to whether the access attempt originates from a trusted hospital workstation or an unrecognised device in an unfamiliar location. A stolen credential carrying valid attributes will pass every verification step, indistinguishable from one used by its legitimate owner.
+The scheme nonetheless shares a fundamental limitation with virtually all existing CP-ABE designs: the access decision is entirely static. Once a user possesses a key whose attributes satisfy the ciphertext policy, decryption is granted unconditionally. No consideration is given to whether the access attempt originates from a trusted hospital workstation or an unrecognised device in an unfamiliar location. A stolen credential carrying valid attributes will pass every verification step, indistinguishable from one used by its legitimate owner.
 
 \subsection{Authentication Security in IoMT} % (fold)
 \label{sec1.1.2}
@@ -44,7 +44,7 @@ Embedding a login risk score as an attribute within a CP-ABE session key makes t
 \section{Problem Statement}
 \label{sec:problemstatement}
 
-Current IoMT access control mechanisms are designed without consideration of the context in which credentials are presented. Cryptographic access control schemes used in IoMT extend decryption rights to any session carrying the required attribute set, with no distinction made between a routine access attempt from a known device and a highly anomalous one originating from an unfamiliar country, network, and device simultaneously. Authentication mechanisms in IoMT operate in a similar fashion, issuing a binary admission decision based solely on key material and retaining no contextual information once a session is admitted. The practical consequence is that a stolen credential with valid attributes confers the same level of data access regardless of whether it is exercised by the legitimate credential holder or by an attacker. To the best of the author's knowledge, no existing mechanism in IoMT access control detects or responds to this risk at the cryptographic layer where patient data is ultimately protected, leaving a direct and exploitable gap between credential theft and unrestricted data exposure.
+Current IoMT access control schemes grant decryption rights to any session carrying valid credential attributes, making no distinction between a routine access from a known device and a highly anomalous login from an unfamiliar country, device, or network. Authentication mechanisms operate in a similar fashion: once a session is admitted, all contextual information is discarded and the credential is treated as fully legitimate. The result is that a stolen credential provides the same data access as one held by its rightful owner. To the best of the author's knowledge, no existing mechanism in IoMT addresses this risk at the cryptographic layer where patient data is ultimately protected, leaving a direct gap between credential theft and unrestricted data exposure.
 
 \section{Research Questions}
 \label{sec:researchquestions}
